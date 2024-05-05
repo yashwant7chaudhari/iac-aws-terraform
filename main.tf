@@ -45,3 +45,46 @@ resource "aws_route_table_association" "dev_public_assoc" {
   subnet_id      = aws_subnet.dev_public_subnet.id
   route_table_id = aws_route_table.dev_public_rt.id
 }
+
+resource "aws_security_group" "dev_sg" {
+  name        = "dev_sg"
+  description = "dev_security_group"
+  vpc_id      = aws_vpc.dev_vpc
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocal    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocal    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_key_pair" "dev_auth" {
+  key_name   = "devkey"
+  public_key = file("~/.ssh/devkey.pub")
+}
+
+resource "aws_instance" "dev_node" {
+  instance_type = t2.micro
+  ami           = data.aws_ami.server_ami_id
+
+  tags {
+    Name = "dev_node"
+  }
+
+  key_name               = aws_key_pair.dev_auth
+  vpc_security_group_ids = [aws_security_group.dev_sg_id]
+  aws_subnet             = [aws_subnet.dev_public_subnet_id]
+
+  root_block_device {
+    volume_size = 10
+  }
+
+}
