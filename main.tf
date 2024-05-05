@@ -72,16 +72,15 @@ resource "aws_key_pair" "dev_auth" {
 }
 
 resource "aws_instance" "dev_node" {
-  instance_type = t2.micro
-  ami           = data.aws_ami.server_ami_id
+  instance_type          = t2.micro
+  ami                    = data.aws_ami.server_ami_id
+  key_name               = aws_key_pair.dev_auth
+  vpc_security_group_ids = [aws_security_group.dev_sg_id]
+  subnet_id              = aws_subnet.dev_public_subnet_id
 
   tags {
     Name = "dev_node"
   }
-
-  key_name               = aws_key_pair.dev_auth
-  vpc_security_group_ids = [aws_security_group.dev_sg_id]
-  aws_subnet             = [aws_subnet.dev_public_subnet_id]
 
   root_block_device {
     volume_size = 10
