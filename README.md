@@ -1,4 +1,4 @@
-### Terraform AWS Deployment Tutorial
+### Mastering AWS Terraform: Build Your Dev Environment for Cloud Deployment Success
 
 Welcome to our Terraform project tutorial, where you'll learn the basics of Terraform while utilizing Visual Studio Code on Windows, Mac, or Linux to deploy AWS resources and set up an EC2 instance that you can SSH into, creating your own redeployable environment. 🚀
 
